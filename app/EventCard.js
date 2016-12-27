@@ -33,6 +33,7 @@ export default class EventCard extends Component {
     }
 
     let time = this._renderTime()
+    let organizations = this._renderOrganizations()
 
     return (
       <View style={styles.card}>
@@ -51,9 +52,7 @@ export default class EventCard extends Component {
           >
         </Image>
         {time}
-        <Text style={styles.organizations}>
-          {"Hosted by " + this.props.event.organizations.join(', ')}
-        </Text>
+        {organizations}
       </View>
     )
   }
@@ -79,6 +78,20 @@ export default class EventCard extends Component {
           {dateFormat(end, "h:MMTT")}
         </Text>
       )
+    }
+  }
+
+  _renderOrganizations() {
+    let organizations = this.props.event.organizations
+    if (organizations.length) {
+      return (
+        <Text style={styles.organizations}>
+          {"Hosted by " + organizations.join(', ')}
+        </Text>
+      )
+    }
+    else {
+      return false
     }
   }
 }

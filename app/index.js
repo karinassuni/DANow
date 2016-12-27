@@ -4,7 +4,7 @@ import {
   Text,
   View
 } from 'react-native'
-import EventCard from './EventCard'
+import EventInfo from './EventInfo'
 
 const testEvents = [
   {
@@ -14,7 +14,7 @@ const testEvents = [
       "Euphrat",
       "Equity Office",
     ],
-    description: "Join De Anza students, faculty and staff for open mic in the Euphrat Museum of Art. Participate in the fusion of spoken word, poetry and hip hop.\n\nIf you are a poet, singer, rapper, spoken word artist, or someone who wants to come join the show, we hope to see you. Come out for good vibes, good beats and good talent!",
+    description: "Join De Anza students, faculty and staff for open mic in the Euphrat Museum of Art. Participate in the fusion of spoken word, poetry and hip hop.\n\nIf you are a poet, singer, rapper, spoken word artist, or someone who wants to come join the show, we hope to see you. Come out for good vibes, good beats and good talent! http://facebook.com",
     end: "2016-11-03T19:00:00-07:00",
     location: "Euphrat Museum of Art",
     start: "2016-11-03T17:00:00-07:00",
@@ -42,7 +42,7 @@ export default class DANow extends Component {
     return (
       <View style={styles.container}>
         {testEvents.map(e => (
-          <EventCard event={e}></EventCard>
+          <EventInfo event={e}></EventInfo>
         ))}
       </View>
     )

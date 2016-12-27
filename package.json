@@ -9,7 +9,10 @@
   "dependencies": {
     "dateformat": "^2.0.0",
     "react": "^15.4.1",
-    "react-native": "0.39.2"
+    "react-native": "0.39.2",
+    "react-native-hyperlink": "0.0.7",
+    "react-native-icons": "^0.7.1",
+    "react-native-vector-icons": "^3.0.0"
   },
   "devDependencies": {
     "babel-jest": "18.0.0",

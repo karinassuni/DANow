@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
 import {
   StyleSheet,
-  Text,
-  View,
-  ListView
 } from 'react-native'
-import EventCard from './EventCard'
+import EventList from './EventList'
 
 const testEvents = [
   {
@@ -39,27 +36,12 @@ const testEvents = [
 ]
 
 export default class DANow extends Component {
-  constructor() {
-    super()
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
-    this.state = {
-      dataSource: ds.cloneWithRows(testEvents),
-    }
-  }
-
   render() {
     return (
-      <ListView
-        dataSource={this.state.dataSource}
-        renderRow={(event) => <EventCard event={event}></EventCard>}
-        style={styles.container}
-      />
+      <EventList events={testEvents}></EventList>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
 })

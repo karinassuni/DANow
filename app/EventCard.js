@@ -18,9 +18,11 @@ export default class EventCard extends Component {
   }
 
   componentDidMount() {
-    Image.getSize(this.props.event.poster, (width, height) => {
-      this.setState({posterAspectRatio: width/height})
-    })
+    if (this.props.event.poster) {
+      Image.getSize(this.props.event.poster, (width, height) => {
+        this.setState({posterAspectRatio: width/height})
+      })
+    }
   }
 
   render() {
@@ -29,7 +31,7 @@ export default class EventCard extends Component {
     if (!isFinite(posterHeight)) {
       posterHeight = 0
     }
-    
+
     return (
       <View style={styles.card}>
         <Text style={styles.name}>
@@ -42,6 +44,7 @@ export default class EventCard extends Component {
             width: deviceWidth,
             height: posterHeight,
             alignSelf: "center",
+            marginBottom: 5,
           }}
           >
         </Image>
@@ -71,17 +74,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingTop: 5,
     paddingBottom: 5,
-    marginBottom: 3
+    textAlign: "center"
   },
   time: {
     fontSize: 14,
-    marginTop: 5,
     paddingTop: 3,
     paddingBottom: 3,
+    textAlign: "center"
   },
   organizations: {
     color: "grey",
     paddingTop: 3,
     paddingBottom: 3,
+    textAlign: "center"
   },
 })

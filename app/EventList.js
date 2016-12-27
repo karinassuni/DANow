@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {
   ListView,
+  View,
   StyleSheet,
 } from 'react-native'
 import EventCard from './EventCard'
@@ -18,8 +19,15 @@ export default class EventList extends Component {
     return (
       <ListView
         dataSource={this.state.dataSource}
-        renderRow={(event) => <EventCard event={event}></EventCard>}
+        renderRow={(event) =>
+          <EventCard event={event}></EventCard>
+        }
+        renderSeparator={(sectionId, rowId) =>
+          <View key={rowId} style={styles.separator}/>
+        }
         style={styles.container}
+        showHorizontalScrollIndicator={false}
+        showVerticalScrollIndicator={false}
       />
     )
   }
@@ -28,5 +36,10 @@ export default class EventList extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  separator: {
+    flex: 1,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: '#8E8E8E',
   },
 })

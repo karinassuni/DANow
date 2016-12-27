@@ -8,8 +8,6 @@ import {
 } from 'react-native'
 import dateFormat from 'dateformat'
 
-dateFormat.masks.time12Only = "h:MMTT"
-
 export default class EventCard extends Component {
   constructor(props) {
     super(props)
@@ -34,14 +32,8 @@ export default class EventCard extends Component {
     
     return (
       <View style={styles.card}>
-        <Text style={styles.name}>{this.props.event.name}</Text>
-        <Text style={styles.time}>
-          {dateFormat(this.props.event.start, "time12Only")}
-          {' - '}
-          {dateFormat(this.props.event.end, "time12Only")}
-        </Text>
-        <Text style={styles.organizations}>
-          {"Hosted by " + this.props.event.organizations.join(', ')}
+        <Text style={styles.name}>
+          {this.props.event.name}
         </Text>
         <Image
           source={{uri: this.props.event.poster}}
@@ -53,6 +45,14 @@ export default class EventCard extends Component {
           }}
           >
         </Image>
+        <Text style={styles.time}>
+          {dateFormat(this.props.event.start, "dddd mmm d, h:MMTT")}
+          {' to '}
+          {dateFormat(this.props.event.end, "h:MMTT")}
+        </Text>
+        <Text style={styles.organizations}>
+          {"Hosted by " + this.props.event.organizations.join(', ')}
+        </Text>
       </View>
     )
   }
@@ -60,19 +60,28 @@ export default class EventCard extends Component {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#F5FCFF",
-    padding: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 8,
+    paddingRight: 8,
     marginBottom: 3,
   },
   name: {
     fontWeight: "bold",
-    marginBottom: 2,
     fontSize: 14,
-  },
-  organizations: {
-    fontStyle: "italic",
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginBottom: 3
   },
   time: {
     fontSize: 14,
+    marginTop: 5,
+    paddingTop: 3,
+    paddingBottom: 3,
+  },
+  organizations: {
+    color: "grey",
+    paddingTop: 3,
+    paddingBottom: 3,
   },
 })

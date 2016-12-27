@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import {
   StyleSheet,
   Text,
-  View
+  View,
+  ListView
 } from 'react-native'
 import EventCard from './EventCard'
 
@@ -38,13 +39,21 @@ const testEvents = [
 ]
 
 export default class DANow extends Component {
+  constructor() {
+    super()
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+    this.state = {
+      dataSource: ds.cloneWithRows(testEvents),
+    }
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        {testEvents.map(e => (
-          <EventCard event={e}></EventCard>
-        ))}
-      </View>
+      <ListView
+        dataSource={this.state.dataSource}
+        renderRow={(event) => <EventCard event={event}></EventCard>}
+        style={styles.container}
+      />
     )
   }
 }
@@ -52,7 +61,5 @@ export default class DANow extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 })

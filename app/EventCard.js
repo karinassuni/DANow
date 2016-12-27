@@ -28,6 +28,10 @@ export default class EventCard extends Component {
   render() {
     let deviceWidth = Dimensions.get("window").width
     let posterHeight = deviceWidth/this.state.posterAspectRatio
+    if (!isFinite(posterHeight)) {
+      posterHeight = 0
+    }
+    
     return (
       <View style={styles.card}>
         <Text style={styles.name}>{this.props.event.name}</Text>

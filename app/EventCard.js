@@ -32,6 +32,8 @@ export default class EventCard extends Component {
       posterHeight = 0
     }
 
+    let time = this._renderTime()
+
     return (
       <View style={styles.card}>
         <Text style={styles.name}>
@@ -48,16 +50,36 @@ export default class EventCard extends Component {
           }}
           >
         </Image>
-        <Text style={styles.time}>
-          {dateFormat(this.props.event.start, "dddd mmm d, h:MMTT")}
-          {' to '}
-          {dateFormat(this.props.event.end, "h:MMTT")}
-        </Text>
+        {time}
         <Text style={styles.organizations}>
           {"Hosted by " + this.props.event.organizations.join(', ')}
         </Text>
       </View>
     )
+  }
+
+  _renderTime() {
+    let event = this.props.event
+    let start = event.start
+    let end = event.end
+
+    let isAllDayEvent = start.valueOf() == end.valueOf()
+    if (isAllDayEvent) {
+      return (
+        <Text style={styles.time}>
+          {dateFormat(start, "dddd mmm d") + ", all day"}
+        </Text>
+      )
+    }
+    else {
+      return (
+        <Text style={styles.time}>
+          {dateFormat(start, "dddd mmm d, h:MMTT")}
+          {' to '}
+          {dateFormat(end, "h:MMTT")}
+        </Text>
+      )
+    }
   }
 }
 

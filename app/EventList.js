@@ -22,9 +22,6 @@ export default class EventList extends Component {
         renderRow={(event) =>
           <EventCard event={event}></EventCard>
         }
-        renderSeparator={(sectionId, rowId) =>
-          <View key={rowId} style={styles.separator}/>
-        }
         style={styles.container}
         showHorizontalScrollIndicator={false}
         showVerticalScrollIndicator={false}
@@ -36,6 +33,7 @@ export default class EventList extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "lightgrey",
   },
   separator: {
     flex: 1,

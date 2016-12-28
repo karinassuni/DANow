@@ -32,53 +32,39 @@ export default class EventCard extends Component {
       posterHeight = 0
     }
 
-    let time = this._renderTime()
+    let marginHorizontal = 8 * 2
     let organizations = this._renderOrganizations()
 
     return (
-      <View style={styles.card}>
-        <Text style={styles.name}>
-          {this.props.event.name}
-        </Text>
-        <Image
-          source={{uri: this.props.event.poster}}
-          style={{
-            resizeMode: "contain",
-            width: deviceWidth,
-            height: posterHeight,
-            alignSelf: "center",
-            marginBottom: 5,
-          }}
-          >
-        </Image>
-        {time}
-        {organizations}
+      <View
+        style={styles.card}
+        shadowRadius={3}
+        shadowOffset={{height: 4}}
+        shadowOpacity={0.2}
+        >
+        <View style={styles.poster}>
+          <Image
+            source={{uri: this.props.event.poster}}
+            style={{
+              resizeMode: "contain",
+              width: deviceWidth - marginHorizontal,
+              height: posterHeight,
+              alignSelf: "center",
+            }}
+            >
+          </Image>
+        </View>
+        <View style={styles.text}>
+          <Text style={styles.name}>
+            {this.props.event.name}
+          </Text>
+          <Text style={styles.time}>
+            {dateFormat(this.props.event.start, "dddd, mmm d")}
+          </Text>
+          {organizations}
+        </View>
       </View>
     )
-  }
-
-  _renderTime() {
-    let event = this.props.event
-    let start = event.start
-    let end = event.end
-
-    let isAllDayEvent = start.valueOf() == end.valueOf()
-    if (isAllDayEvent) {
-      return (
-        <Text style={styles.time}>
-          {dateFormat(start, "dddd mmm d") + ", all day"}
-        </Text>
-      )
-    }
-    else {
-      return (
-        <Text style={styles.time}>
-          {dateFormat(start, "dddd mmm d, h:MMTT")}
-          {' to '}
-          {dateFormat(end, "h:MMTT")}
-        </Text>
-      )
-    }
   }
 
   _renderOrganizations() {
@@ -98,29 +84,34 @@ export default class EventCard extends Component {
 
 const styles = StyleSheet.create({
   card: {
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 8,
-    paddingRight: 8,
-    marginBottom: 3,
+    paddingVertical: 5,
+    paddingHorizontal: 8,
+    marginVertical: 3,
+    marginHorizontal: 8,
+    backgroundColor: "white",
+  },
+  poster: {
+    overflow: "hidden",
+  },
+  text: {
+    paddingVertical: 8,
+    paddingHorizontal: 10,
   },
   name: {
     fontWeight: "bold",
     fontSize: 14,
     paddingTop: 5,
     paddingBottom: 5,
-    textAlign: "center"
   },
   time: {
     fontSize: 14,
     paddingTop: 3,
     paddingBottom: 3,
-    textAlign: "center"
   },
   organizations: {
+    fontSize: 12,
     color: "grey",
     paddingTop: 3,
     paddingBottom: 3,
-    textAlign: "center"
   },
 })

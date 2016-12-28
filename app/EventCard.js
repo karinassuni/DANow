@@ -54,13 +54,20 @@ export default class EventCard extends Component {
           >
         </Image>
         <View style={styles.text}>
-          <Text style={styles.name}>
-            {this.props.event.name}
-          </Text>
-          <Text style={styles.time}>
-            {dateFormat(this.props.event.start, "dddd, mmm d")}
-          </Text>
-          {organizations}
+          <View style={styles.time}>
+            <Text style={styles.date}>
+              {dateFormat(this.props.event.start, "d")}
+            </Text>
+            <Text style={styles.weekday}>
+              {dateFormat(this.props.event.start, "ddd")}
+            </Text>
+          </View>
+          <View style={{flex: 1}}>
+            <Text style={styles.name}>
+              {this.props.event.name}
+            </Text>
+            {organizations}
+          </View>
         </View>
       </View>
     )
@@ -92,16 +99,26 @@ const styles = StyleSheet.create({
   text: {
     paddingVertical: 13,
     paddingHorizontal: 16,
+    flexDirection: "row",
+  },
+  time: {
+    justifyContent: "center",
+    paddingHorizontal: 5,
+    marginRight: 16,
+  },
+  date: {
+    fontSize: 20,
+    textAlign: "center",
+    marginBottom: 3,
+  },
+  weekday: {
+    textAlign: "center",
   },
   name: {
     fontWeight: "bold",
     fontSize: 14,
     paddingTop: 3,
     paddingBottom: 5,
-  },
-  time: {
-    fontSize: 14,
-    paddingVertical: 3,
   },
   organizations: {
     fontSize: 12,

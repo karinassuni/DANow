@@ -84,8 +84,6 @@ export default class EventCard extends Component {
 
 const styles = StyleSheet.create({
   card: {
-    paddingVertical: 5,
-    paddingHorizontal: 8,
     marginVertical: 3,
     marginHorizontal: 8,
     backgroundColor: "white",
@@ -94,24 +92,22 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   text: {
-    paddingVertical: 8,
-    paddingHorizontal: 10,
+    paddingVertical: 13,
+    paddingHorizontal: 16,
   },
   name: {
     fontWeight: "bold",
     fontSize: 14,
-    paddingTop: 5,
+    paddingTop: 3,
     paddingBottom: 5,
   },
   time: {
     fontSize: 14,
-    paddingTop: 3,
-    paddingBottom: 3,
+    paddingVertical: 3,
   },
   organizations: {
     fontSize: 12,
     color: "grey",
-    paddingTop: 3,
-    paddingBottom: 3,
+    paddingVertical: 3,
   },
 })

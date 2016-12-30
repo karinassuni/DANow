@@ -3,6 +3,7 @@ import {
   ListView,
   View,
   StyleSheet,
+  TouchableOpacity,
 } from 'react-native'
 import EventCard from './EventCard'
 
@@ -20,7 +21,9 @@ export default class EventList extends Component {
       <ListView
         dataSource={this.state.dataSource}
         renderRow={(event) =>
-          <EventCard event={event}></EventCard>
+          <TouchableOpacity activeOpacity={0.85}>
+            <EventCard event={event}></EventCard>
+          </TouchableOpacity>
         }
         style={styles.container}
         showHorizontalScrollIndicator={false}

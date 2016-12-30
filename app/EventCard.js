@@ -27,8 +27,8 @@ export default class EventCard extends Component {
   }
 
   render() {
-    let deviceWidth = Dimensions.get("window").width
-    let posterWidth = deviceWidth
+    const deviceWidth = Dimensions.get("window").width
+    const posterWidth = deviceWidth
       - flattenStyle(styles.card).marginHorizontal * 2
       - flattenStyle(styles.poster).paddingHorizontal * 2
     let posterHeight = posterWidth/this.state.posterAspectRatio
@@ -36,7 +36,7 @@ export default class EventCard extends Component {
       posterHeight = 0
     }
 
-    let organizations = this._renderOrganizations()
+    const organizations = this._renderOrganizations()
 
     return (
       <View
@@ -78,7 +78,7 @@ export default class EventCard extends Component {
   }
 
   _renderOrganizations() {
-    let organizations = this.props.event.organizations
+    const organizations = this.props.event.organizations
     if (organizations.length) {
       return (
         <Text style={styles.organizations}>

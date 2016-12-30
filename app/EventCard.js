@@ -36,8 +36,6 @@ export default class EventCard extends Component {
       posterHeight = 0
     }
 
-    const organizations = this._renderOrganizations()
-
     return (
       <View
         style={styles.card}
@@ -70,7 +68,7 @@ export default class EventCard extends Component {
             <Text style={styles.name}>
               {this.props.event.name}
             </Text>
-            {organizations}
+            {this._renderOrganizations()}
           </View>
         </View>
       </View>

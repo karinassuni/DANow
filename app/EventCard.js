@@ -18,6 +18,12 @@ export default class EventCard extends Component {
       posterAspectRatio: 0,
     }
   }
+  
+   static get defaultProps() {
+    return {
+      showOrgs: true
+    };
+   }
 
   componentDidMount() {
     Image.getSize(this.props.event.poster, (width, height) => {
@@ -36,9 +42,12 @@ export default class EventCard extends Component {
           {' - '}
           {dateFormat(this.props.event.end, "time12Only")}
         </Text>
-        <Text style={styles.organizations}>
-          {"Hosted by " + this.props.event.organizations.join(', ')}
-        </Text>
+        if (this.props.showOrgs)
+		{
+			<Text style={styles.organizations}>
+			  {"Hosted by " + this.props.event.organizations.join(', ')}
+			</Text>
+		}
         <Image
           source={{uri: this.props.event.poster}}
           style={{

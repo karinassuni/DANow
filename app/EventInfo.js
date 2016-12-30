@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
 import {
+  Alert,
   Dimensions,
+  Image,
   Linking,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
+  StatusBar,
   View
 } from 'react-native'
 
@@ -21,16 +25,31 @@ export default class EventInfo extends Component {
   }
   
   render() {
-	let deviceWidth = Dimensions.get("window").width
+	  
     return (
-	  <View>
-	  {/*<View style={{backgroundColor: '#2980b9', width: deviceWidth, height: 30}}>*/}
+	
+	  <ScrollView>
+			<Image
+			  source={{uri: this.props.event.poster}}
+			  style={{
+				//flex:1, 
+				//flexDirection: 'row',
+				resizeMode: "contain",
+				width: 400,
+				height: 400,
+				alignSelf: "center",
+			  }}
+			  >
+			</Image>
+		
+        <View style={{padding: 10}}>
+		
+
 			<Text style={styles.name} selectable={true}>{this.props.event.name}</Text>
-				{/*</View>*/}
-      <View style={{padding: 10}}>
-		<View style={styles.container}>
-			<MyIcon name='event' />
-			<Text style={styles.boldText} selectable={true}>
+	  
+		  <View style={styles.rowContainer}>
+			<MyIcon name='access-time' />
+			<Text style={styles.bigText} selectable={true}>
 			  {dateFormat(this.props.event.start, "dayOnly")}
 			  {' at '}
 			  {dateFormat(this.props.event.start, "time12Only")}
@@ -39,30 +58,40 @@ export default class EventInfo extends Component {
 			</Text>
 		</View>
 		
-		<View style={styles.container}>
+		<View style={styles.rowContainer}>
 			<MyIcon name='place' />
-			<Text style={styles.normalText}>
-			  {'Location: '}
-			</Text>
-			<Text style={styles.boldText}>
+			<Text style={styles.bigText} selectable={true}>
 				{this.props.event.location}
 			</Text>
+		</View>		
+		
+		<View style={{flexDirection: 'row', justifyContent: 'space-between', 
+			paddingBottom: 10, paddingTop: 10}}>
+		  <TextIconButton
+			onPress={this._onPressAddToCalendar}
+			icon='event'
+			title='Add to Calendar'
+		  />
+		  <TextIconButton
+			onPress={this._onPressShare}
+			icon='share'
+			title='Share'
+		  />
 		</View>
-
 		
 		<Hyperlink linkStyle={{color:'#2980b9'}} onPress={(url) => this._goToURL(url)}>
             <Text style={styles.normalText} selectable={true}>
-                {this.props.event.description}
+               {this.props.event.description}
             </Text>
         </Hyperlink>
 		
 		<Text style={styles.normalText}  selectable={true}>
-          {"Hosted by " + this.props.event.organizations.join(', ')}
+          {"\nHosted by " + this.props.event.organizations.join(', ')}
         </Text>
 		
 	 </View>
-	 </View>
-    )
+	 </ScrollView>
+    );
   }
   
   _goToURL(url) {
@@ -74,12 +103,53 @@ export default class EventInfo extends Component {
 	  }
 	});
   }
+  
+  _onPressImage(src) //function is called but doesn't work as intended
+  {
+	  React.createClass({
+	  render() {
+		return (
+		  <View style={{flex: 1, alignItems: 'stretch'}}>
+			<Image style={{flex: 1}} source={{uri: {src}}} />
+		  </View>
+		);
+	  }
+	});
+  }
+  
+  _onPressShare()
+  {
+	  //Alert.alert('Button has been pressed!');
+  }
+  
+  _onPressAddToCalendar()
+  {
+	  //Alert.alert('Button has been pressed!');
+  }
 }
 
 class MyIcon extends Component {
   render() {
     return (
-	  <Icon name={this.props.name} size={30} color="#4F8EF7" borderRadius={20}/>
+	  <Icon name={this.props.name} style={{paddingRight: 5}} size={28} color='grey' // "#4F8EF7"
+	  borderRadius={20}/>
+    );
+  }
+}
+
+class TextIconButton extends Component {
+  render() {
+    return (
+	  <TouchableOpacity onPress={this.props.onPress}>
+		<View style={{flexDirection: 'row', color: 'darkgrey'}}>
+		  <Icon name={this.props.icon} style={{paddingRight: 5}} size={28} color='#4F8EF7'
+		  borderRadius={20}/>
+		  <Text style={styles.buttonText}>
+			  {this.props.title}
+		  </Text>
+		</View>
+	  </TouchableOpacity>
+	  
     );
   }
 }
@@ -89,16 +159,17 @@ const styles = StyleSheet.create({
 	//alignSelf: "center",
     padding: 5,
 	//fontWeight: 'bold',
+	paddingLeft: 40,
     fontFamily: 'sans-serif',
 	marginBottom: 3,
-    fontSize: 18,
+    fontSize: 18
   },
-  boldText: {
+  bigText: {
 	fontFamily: 'sans-serif',
     fontSize: 16,
 	textAlignVertical : 'center'
   },
-   container: {
+   rowContainer: {
     //flex: 1,
     flexDirection: 'row',
 	padding: 5,
@@ -107,10 +178,18 @@ const styles = StyleSheet.create({
     //width: 294
 	//height: 1
   },
+  
   normalText: {
 	fontFamily: 'sans-serif',
-    fontSize: 16, 
+    fontSize: 14, 
 	textAlignVertical : 'center'
-  }
+  },
+  
+   buttonText: {
+	fontFamily: 'sans-serif',
+    fontSize: 16, 
+	color: '#4F8EF7',
+	textAlignVertical : 'center'
+  },
 })
 

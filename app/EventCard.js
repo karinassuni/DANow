@@ -4,8 +4,9 @@ import {
   Text,
   View,
   Image,
-  Dimensions
+  Dimensions,
 } from 'react-native'
+import flattenStyle from 'flattenStyle'
 import dateFormat from 'dateformat'
 
 export default class EventCard extends Component {
@@ -27,10 +28,10 @@ export default class EventCard extends Component {
 
   render() {
     let deviceWidth = Dimensions.get("window").width
-    let marginHorizontal = 8 * 2
-    let paddingHorizontal = 5 * 2
-    let effectiveWidth = deviceWidth - marginHorizontal - paddingHorizontal
-    let posterHeight = effectiveWidth/this.state.posterAspectRatio
+    let posterWidth = deviceWidth
+      - flattenStyle(styles.card).marginHorizontal * 2
+      - flattenStyle(styles.poster).paddingHorizontal * 2
+    let posterHeight = posterWidth/this.state.posterAspectRatio
     if (!isFinite(posterHeight)) {
       posterHeight = 0
     }
@@ -49,7 +50,7 @@ export default class EventCard extends Component {
             source={{uri: this.props.event.poster}}
             style={{
               resizeMode: "contain",
-              width: effectiveWidth,
+              width: posterWidth,
               height: posterHeight,
               alignSelf: "center",
             }}
@@ -98,7 +99,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   poster: {
-    padding: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 5,
   },
   text: {
     paddingVertical: 13,

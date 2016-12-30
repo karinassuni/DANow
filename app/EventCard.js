@@ -28,7 +28,8 @@ export default class EventCard extends Component {
   render() {
     let deviceWidth = Dimensions.get("window").width
     let marginHorizontal = 8 * 2
-    let effectiveWidth = deviceWidth - marginHorizontal
+    let paddingHorizontal = 5 * 2
+    let effectiveWidth = deviceWidth - marginHorizontal - paddingHorizontal
     let posterHeight = effectiveWidth/this.state.posterAspectRatio
     if (!isFinite(posterHeight)) {
       posterHeight = 0
@@ -43,16 +44,18 @@ export default class EventCard extends Component {
         shadowOffset={{height: 4}}
         shadowOpacity={0.2}
         >
-        <Image
-          source={{uri: this.props.event.poster}}
-          style={{
-            resizeMode: "contain",
-            width: effectiveWidth,
-            height: posterHeight,
-            alignSelf: "center",
-          }}
-          >
-        </Image>
+        <View style={styles.poster}>
+          <Image
+            source={{uri: this.props.event.poster}}
+            style={{
+              resizeMode: "contain",
+              width: effectiveWidth,
+              height: posterHeight,
+              alignSelf: "center",
+            }}
+            >
+          </Image>
+        </View>
         <View style={styles.text}>
           <View style={styles.time}>
             <Text style={styles.date}>
@@ -95,6 +98,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   poster: {
+    padding: 5,
   },
   text: {
     paddingVertical: 13,

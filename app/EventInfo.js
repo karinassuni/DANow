@@ -20,25 +20,44 @@ var SendIntentAndroid = require('react-native-send-intent');
 
 dateFormat.masks.dayOnly = "dddd, mmm d"
 dateFormat.masks.time12Only = "h:MM TT"
+dateFormat.masks.shareFmt = 'yyyy-mm-dd HH:MM'
+
 
 export default class EventInfo extends Component {
   constructor(props) {
     super(props)
+	
+	// Used later to determine poster height following from device width
+	this.state = {
+      posterAspectRatio: 0,
+    }
+	
+	this._onPressImage = this._onPressImage.bind(this)
+	this._onPressShare = this._onPressShare.bind(this)
+	this._onPressAddToCalendar = this._onPressAddToCalendar.bind(this)
+	
+  }
+  
+  componentDidMount() {
+    Image.getSize(this.props.event.poster, (width, height) => {
+      this.setState({posterAspectRatio: width/height})
+    })
   }
   
   render() {
 	  
+	let deviceWidth = Dimensions.get("window").width
+    let posterHeight = deviceWidth/this.state.posterAspectRatio
+	
     return (
 	
 	  <ScrollView>
 			<Image
 			  source={{uri: this.props.event.poster}}
 			  style={{
-				//flex:1, 
-				//flexDirection: 'row',
 				resizeMode: "contain",
-				width: 400,
-				height: 400,
+				width: deviceWidth,
+				height: posterHeight,
 				alignSelf: "center",
 			  }}
 			  >
@@ -87,7 +106,7 @@ export default class EventInfo extends Component {
             </Text>
         </Hyperlink>
 		
-		<Text style={styles.normalText}  selectable={true}>
+		<Text style={styles.bigText}  selectable={true}>
           {"\nHosted by " + this.props.event.organizations.join(', ')}
         </Text>
 		
@@ -121,23 +140,31 @@ export default class EventInfo extends Component {
   
   _onPressShare()
   {
-	  SendIntentAndroid.sendText({
-		  title: 'Please share this text',
-		  text: 'Lorem ipsum dolor sit amet, per error erant eu, antiopam intellegebat ne sed',
-		  type: SendIntentAndroid.TEXT_PLAIN
-		});
+	  let message = this.props.event.name + " is happening at " + this.props.event.location +
+			" on " + dateFormat(this.props.event.start, "dayOnly") + ' from ' + dateFormat(this.props.event.start, "time12Only") + ' - ' + dateFormat(this.props.event.end, "time12Only")
+	  SendIntentAndroid.openChooserWithOptions({
+		  subject: this.props.event.name,
+		  text: message
+		}, 'Share event');
   }
   
   _onPressAddToCalendar()
-  {
-	  SendIntentAndroid.addCalendarEvent({
-		  title: 'Go To The Park',
-		  description: "It's fun to play at the park.",
-		  startDate: '2016-01-25 10:00',
-		  endDate: '2016-01-25 11:00',
-		  recurrence: 'weekly',
-		  location: 'The Park'
-		});
+  {	
+  
+	//Alert.alert(dateFormat(this.props.event.start, 'shareFmt'));
+	
+	SendIntentAndroid.addCalendarEvent({
+	  title: this.props.event.name,
+	  description: this.props.event.description,
+	  startDate: dateFormat(this.props.event.start, 'shareFmt'),
+	  endDate: dateFormat(this.props.event.end, 'shareFmt'),
+	  recurrence: '',
+	  location: this.props.event.location
+	});
+		
+	SendIntentAndroid.openCalendar();
+
+
   }
 }
 
@@ -154,7 +181,7 @@ class TextIconButton extends Component {
   render() {
     return (
 	  <TouchableOpacity onPress={this.props.onPress}>
-		<View style={{flexDirection: 'row', color: 'darkgrey'}}>
+		<View style={{flexDirection: 'row'}}>
 		  <Icon name={this.props.icon} style={{paddingRight: 5}} size={28} color='#4F8EF7'
 		  borderRadius={20}/>
 		  <Text style={styles.buttonText}>
@@ -169,9 +196,7 @@ class TextIconButton extends Component {
 
 const styles = StyleSheet.create({
   name: {
-	//alignSelf: "center",
     padding: 5,
-	//fontWeight: 'bold',
 	paddingLeft: 40,
     fontFamily: 'sans-serif',
 	marginBottom: 3,
@@ -183,19 +208,8 @@ const styles = StyleSheet.create({
 	textAlignVertical : 'center'
   },
    rowContainer: {
-    //flex: 1,
     flexDirection: 'row',
 	padding: 5,
-
-    //flexWrap: 'wrap',
-    //width: 294
-	//height: 1
-  },
-  
-  normalText: {
-	fontFamily: 'sans-serif',
-    fontSize: 14, 
-	textAlignVertical : 'center'
   },
   
    buttonText: {

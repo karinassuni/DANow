@@ -15,6 +15,8 @@ import {
 import dateFormat from 'dateformat'
 import Hyperlink from 'react-native-hyperlink';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+var SendIntentAndroid = require('react-native-send-intent');
+
 
 dateFormat.masks.dayOnly = "dddd, mmm d"
 dateFormat.masks.time12Only = "h:MM TT"
@@ -80,7 +82,7 @@ export default class EventInfo extends Component {
 		</View>
 		
 		<Hyperlink linkStyle={{color:'#2980b9'}} onPress={(url) => this._goToURL(url)}>
-            <Text style={styles.normalText} selectable={true}>
+            <Text style={styles.bigText} selectable={true}>
                {this.props.event.description}
             </Text>
         </Hyperlink>
@@ -119,12 +121,23 @@ export default class EventInfo extends Component {
   
   _onPressShare()
   {
-	  //Alert.alert('Button has been pressed!');
+	  SendIntentAndroid.sendText({
+		  title: 'Please share this text',
+		  text: 'Lorem ipsum dolor sit amet, per error erant eu, antiopam intellegebat ne sed',
+		  type: SendIntentAndroid.TEXT_PLAIN
+		});
   }
   
   _onPressAddToCalendar()
   {
-	  //Alert.alert('Button has been pressed!');
+	  SendIntentAndroid.addCalendarEvent({
+		  title: 'Go To The Park',
+		  description: "It's fun to play at the park.",
+		  startDate: '2016-01-25 10:00',
+		  endDate: '2016-01-25 11:00',
+		  recurrence: 'weekly',
+		  location: 'The Park'
+		});
   }
 }
 

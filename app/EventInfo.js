@@ -26,31 +26,33 @@ dateFormat.masks.shareFmt = 'yyyy-mm-dd HH:MM'
 export default class EventInfo extends Component {
   constructor(props) {
     super(props)
-	
+
 	// Used later to determine poster height following from device width
 	this.state = {
       posterAspectRatio: 0,
     }
-	
+
 	this._onPressImage = this._onPressImage.bind(this)
 	this._onPressShare = this._onPressShare.bind(this)
 	this._onPressAddToCalendar = this._onPressAddToCalendar.bind(this)
-	
+
   }
-  
+
   componentDidMount() {
     Image.getSize(this.props.event.poster, (width, height) => {
       this.setState({posterAspectRatio: width/height})
     })
   }
-  
+
   render() {
-	  
+
 	let deviceWidth = Dimensions.get("window").width
     let posterHeight = deviceWidth/this.state.posterAspectRatio
-	
+    if (!isFinite(posterHeight))
+      posterHeight = 0
+
     return (
-	
+
 	  <ScrollView>
 			<Image
 			  source={{uri: this.props.event.poster}}
@@ -62,12 +64,12 @@ export default class EventInfo extends Component {
 			  }}
 			  >
 			</Image>
-		
+
         <View style={{padding: 10}}>
-		
+
 
 			<Text style={styles.name} selectable={true}>{this.props.event.name}</Text>
-	  
+
 		  <View style={styles.rowContainer}>
 			<MyIcon name='access-time' />
 			<Text style={styles.bigText} selectable={true}>
@@ -78,15 +80,15 @@ export default class EventInfo extends Component {
 			  {dateFormat(this.props.event.end, "time12Only")}
 			</Text>
 		</View>
-		
+
 		<View style={styles.rowContainer}>
 			<MyIcon name='place' />
 			<Text style={styles.bigText} selectable={true}>
 				{this.props.event.location}
 			</Text>
-		</View>		
-		
-		<View style={{flexDirection: 'row', justifyContent: 'space-between', 
+		</View>
+
+		<View style={{flexDirection: 'row', justifyContent: 'space-between',
 			paddingBottom: 10, paddingTop: 10}}>
 		  <TextIconButton
 			onPress={this._onPressAddToCalendar}
@@ -99,22 +101,22 @@ export default class EventInfo extends Component {
 			title='Share'
 		  />
 		</View>
-		
+
 		<Hyperlink linkStyle={{color:'#2980b9'}} onPress={(url) => this._goToURL(url)}>
             <Text style={styles.bigText} selectable={true}>
                {this.props.event.description}
             </Text>
         </Hyperlink>
-		
+
 		<Text style={styles.bigText}  selectable={true}>
           {"\nHosted by " + this.props.event.organizations.join(', ') + '\n'}
         </Text>
-		
+
 	 </View>
 	 </ScrollView>
     );
   }
-  
+
   _goToURL(url) {
 	Linking.canOpenURL(url).then(supported => {
 	  if (supported) {
@@ -124,7 +126,7 @@ export default class EventInfo extends Component {
 	  }
 	});
   }
-  
+
   _onPressImage(src) //function is called but doesn't work as intended
   {
 	  React.createClass({
@@ -137,7 +139,7 @@ export default class EventInfo extends Component {
 	  }
 	});
   }
-  
+
   _onPressShare()
   {
 	  let message = this.props.event.name + " is happening at " + this.props.event.location +
@@ -147,12 +149,12 @@ export default class EventInfo extends Component {
 		  text: message
 		}, 'Share event');
   }
-  
+
   _onPressAddToCalendar()
-  {	
-  
+  {
+
 	//Alert.alert(dateFormat(this.props.event.start, 'shareFmt'));
-	
+
 	SendIntentAndroid.addCalendarEvent({
 	  title: this.props.event.name,
 	  description: this.props.event.description,
@@ -161,7 +163,7 @@ export default class EventInfo extends Component {
 	  recurrence: '',
 	  location: this.props.event.location
 	});
-		
+
 	SendIntentAndroid.openCalendar();
 
 
@@ -189,7 +191,7 @@ class TextIconButton extends Component {
 		  </Text>
 		</View>
 	  </TouchableOpacity>
-	  
+
     );
   }
 }
@@ -198,13 +200,13 @@ const styles = StyleSheet.create({
   name: {
     padding: 5,
 	paddingLeft: 40,
-    fontFamily: 'sans-serif',
+    // fontFamily: 'sans-serif',
 	marginBottom: 3,
     fontSize: 19,
 	//textAlign: 'center',
   },
   bigText: {
-	fontFamily: 'sans-serif',
+	// fontFamily: 'sans-serif',
     fontSize: 16,
 	textAlignVertical : 'center'
   },
@@ -212,12 +214,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
 	padding: 5,
   },
-  
+
    buttonText: {
-	fontFamily: 'sans-serif',
-    fontSize: 16, 
+	// fontFamily: 'sans-serif',
+    fontSize: 16,
 	color: '#4F8EF7',
 	textAlignVertical : 'center'
   },
 })
-

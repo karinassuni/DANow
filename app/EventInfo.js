@@ -107,7 +107,7 @@ export default class EventInfo extends Component {
         </Hyperlink>
 		
 		<Text style={styles.bigText}  selectable={true}>
-          {"\nHosted by " + this.props.event.organizations.join(', ')}
+          {"\nHosted by " + this.props.event.organizations.join(', ') + '\n'}
         </Text>
 		
 	 </View>
@@ -200,7 +200,8 @@ const styles = StyleSheet.create({
 	paddingLeft: 40,
     fontFamily: 'sans-serif',
 	marginBottom: 3,
-    fontSize: 18
+    fontSize: 19,
+	//textAlign: 'center',
   },
   bigText: {
 	fontFamily: 'sans-serif',

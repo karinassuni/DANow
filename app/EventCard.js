@@ -4,11 +4,10 @@ import {
   Text,
   View,
   Image,
-  Dimensions
+  Dimensions,
 } from 'react-native'
+import flattenStyle from 'flattenStyle'
 import dateFormat from 'dateformat'
-
-dateFormat.masks.time12Only = "h:MMTT"
 
 export default class EventCard extends Component {
   constructor(props) {
@@ -26,60 +25,114 @@ export default class EventCard extends Component {
    }
 
   componentDidMount() {
-    Image.getSize(this.props.event.poster, (width, height) => {
-      this.setState({posterAspectRatio: width/height})
-    })
+    if (this.props.event.poster) {
+      Image.getSize(this.props.event.poster, (width, height) => {
+        this.setState({posterAspectRatio: width/height})
+      })
+    }
   }
 
   render() {
-    let deviceWidth = Dimensions.get("window").width
-    let posterHeight = deviceWidth/this.state.posterAspectRatio
-    if (!isFinite(posterHeight))
+    const deviceWidth = Dimensions.get("window").width
+    const posterWidth = deviceWidth
+      - flattenStyle(styles.card).marginHorizontal * 2
+      - flattenStyle(styles.poster).paddingHorizontal * 2
+    let posterHeight = posterWidth/this.state.posterAspectRatio
+    if (!isFinite(posterHeight)) {
       posterHeight = 0
+    }
+
     return (
-      <View style={styles.card}>
-        <Text style={styles.name}>{this.props.event.name}</Text>
-        <Text style={styles.time}>
-          {dateFormat(this.props.event.start, "time12Only")}
-          {' - '}
-          {dateFormat(this.props.event.end, "time12Only")}
-        </Text>
-        if (this.props.showOrgs)
-		{
-			<Text style={styles.organizations}>
-			  {"Hosted by " + this.props.event.organizations.join(', ')}
-			</Text>
-		}
-        <Image
-          source={{uri: this.props.event.poster}}
-          style={{
-            resizeMode: "contain",
-            width: deviceWidth,
-            height: posterHeight,
-            alignSelf: "center",
-          }}
-          >
-        </Image>
+      <View
+        style={styles.card}
+        shadowRadius={3}
+        shadowOffset={{height: 4}}
+        shadowOpacity={0.2}
+        >
+        <View style={styles.poster}>
+          <Image
+            source={{uri: this.props.event.poster}}
+            style={{
+              resizeMode: "contain",
+              width: posterWidth,
+              height: posterHeight,
+              alignSelf: "center",
+            }}
+            >
+          </Image>
+        </View>
+        <View style={styles.text}>
+          <View style={styles.time}>
+            <Text style={styles.date}>
+              {dateFormat(this.props.event.start, "d")}
+            </Text>
+            <Text style={styles.weekday}>
+              {dateFormat(this.props.event.start, "ddd")}
+            </Text>
+          </View>
+          <View style={{flex: 1}}>
+            <Text style={styles.name}>
+              {this.props.event.name}
+            </Text>
+            {this._renderOrganizations()}
+          </View>
+        </View>
       </View>
     )
+  }
+
+  _renderOrganizations() {
+    const organizations = this.props.event.organizations
+    if (organizations.length) {
+      return (
+        <Text style={styles.organizations}>
+          {"Hosted by " + organizations.join(', ')}
+        </Text>
+      )
+    }
+    else {
+      return false
+    }
   }
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#F5FCFF",
-    padding: 10,
+    marginVertical: 3,
+    marginHorizontal: 8,
+    backgroundColor: "white",
+  },
+  poster: {
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+  },
+  text: {
+    paddingVertical: 13,
+    paddingHorizontal: 16,
+    flexDirection: "row",
+  },
+  time: {
+    justifyContent: "center",
+    paddingHorizontal: 5,
+    marginRight: 16,
+  },
+  date: {
+    fontSize: 20,
+    textAlign: "center",
     marginBottom: 3,
+  },
+  weekday: {
+    textAlign: "center",
   },
   name: {
     fontWeight: "bold",
-    marginBottom: 2,
     fontSize: 14,
+    paddingTop: 3,
+    paddingBottom: 5,
   },
   organizations: {
-    fontStyle: "italic",
-  },
-  time: {
-    fontSize: 14,
+    fontSize: 12,
+    color: "grey",
+    paddingVertical: 3,
   },
 })
